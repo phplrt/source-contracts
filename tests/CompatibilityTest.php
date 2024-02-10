@@ -8,13 +8,11 @@ use Phplrt\Contracts\Source\FileInterface;
 use Phplrt\Contracts\Source\ReadableInterface;
 use Phplrt\Contracts\Source\SourceExceptionInterface;
 use Phplrt\Contracts\Source\SourceFactoryInterface;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Note: Changing the behavior of these tests is allowed ONLY when updating
  *       a MAJOR version of the package.
  */
-#[Group('phplrt/source-contracts')]
 class CompatibilityTest extends TestCase
 {
     public function testFileCompatibility(): void
@@ -30,6 +28,9 @@ class CompatibilityTest extends TestCase
         };
     }
 
+    /**
+     * @requires PHP 8.0
+     */
     public function testFileWithMixedCompatibility(): void
     {
         self::expectNotToPerformAssertions();
@@ -54,6 +55,9 @@ class CompatibilityTest extends TestCase
         };
     }
 
+    /**
+     * @requires PHP 8.0
+     */
     public function testReadableWithMixedCompatibility(): void
     {
         self::expectNotToPerformAssertions();
@@ -84,6 +88,9 @@ class CompatibilityTest extends TestCase
         };
     }
 
+    /**
+     * @requires PHP 8.0
+     */
     public function testSourceFactoryWithMixedCompatibility(): void
     {
         self::expectNotToPerformAssertions();
