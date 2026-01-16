@@ -36,15 +36,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.x-dev",
-            "dev-main": "3.x-dev"
+            "dev-master": "4.x-dev",
+            "dev-main": "4.x-dev"
         }
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "phpstan/extension-installer": true
-        }
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
