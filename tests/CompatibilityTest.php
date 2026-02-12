@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Phplrt\Contracts\Source\Tests;
 
+use Phplrt\Contracts\Source\Exception\SourceExceptionInterface;
+use Phplrt\Contracts\Source\Factory\SourceFactoryInterface;
+use Phplrt\Contracts\Source\Factory\SourceFactoryInterface;
 use Phplrt\Contracts\Source\FileInterface;
 use Phplrt\Contracts\Source\ReadableInterface;
-use Phplrt\Contracts\Source\SourceExceptionInterface;
-use Phplrt\Contracts\Source\SourceFactoryInterface;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 /**
  * Note: Changing the behavior of these tests is allowed ONLY when updating
@@ -15,46 +17,56 @@ use Phplrt\Contracts\Source\SourceFactoryInterface;
  */
 class CompatibilityTest extends TestCase
 {
+    #[DoesNotPerformAssertions]
     public function testFileCompatibility(): void
     {
-        self::expectNotToPerformAssertions();
-
         new class () implements FileInterface {
-            public function getPathname(): string {}
+            public string $pathname;
 
-            public function getStream(): mixed {}
-            public function getContents(): string {}
-            public function getHash(): string {}
+            public mixed $stream;
+            public string $content;
+            public string $hash;
         };
     }
 
+    #[DoesNotPerformAssertions]
     public function testReadableCompatibility(): void
     {
-        self::expectNotToPerformAssertions();
-
         new class () implements ReadableInterface {
-            public function getStream(): mixed {}
-            public function getContents(): string {}
-            public function getHash(): string {}
+            public mixed $stream;
+            public string $content;
+            public string $hash;
         };
     }
 
+    #[DoesNotPerformAssertions]
     public function testSourceExceptionCompatibility(): void
     {
-        self::expectNotToPerformAssertions();
-
         new class () extends \Exception implements SourceExceptionInterface {};
     }
 
+    #[DoesNotPerformAssertions]
     public function testSourceFactoryCompatibility(): void
     {
-        self::expectNotToPerformAssertions();
-
         new class () implements SourceFactoryInterface {
             public function create(mixed $source): ReadableInterface {}
-            public function createFromString(string $content = '', ?string $name = null): ReadableInterface {}
-            public function createFromFile(string $filename): FileInterface {}
-            public function createFromStream(mixed $stream, ?string $name = null): ReadableInterface {}
+            public function tryCreate(mixed $source): ?ReadableInterface {}
+
+            public function createFromFile(string $pathname): FileInterface {}
+            public function tryCreateFromFile(string $pathname): ?FileInterface {}
+            public function createFromStream(mixed $stream, ?string $virtualPathname = null): ReadableInterface {}
+            public function tryCreateFromStream(mixed $stream, ?string $virtualPathname = null): ?ReadableInterface {}
+            public function createFromString(string $content = '', ?string $virtualPathname = null): ReadableInterface {}
+            public function tryCreateFromString(string $content = '', ?string $virtualPathname = null): ?ReadableInterface {}
+        };
+    }
+
+    #[DoesNotPerformAssertions]
+    public function testSourceCreatorCompatibility(): void
+    {
+        new class () implements SourceFactoryInterface {
+            public function create(mixed $source): ReadableInterface {}
+            public function tryCreate(mixed $source): ?ReadableInterface {}
         };
     }
 }
