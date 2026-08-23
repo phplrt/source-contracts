@@ -7,7 +7,7 @@ namespace Phplrt\Contracts\Source\Tests;
 use Phplrt\Contracts\Source\Exception\SourceExceptionInterface;
 use Phplrt\Contracts\Source\FileInterface;
 use Phplrt\Contracts\Source\ReadableInterface;
-use Phplrt\Contracts\Source\SourceFactoryInterface;
+use Phplrt\Contracts\Source\ReadableStreamInterface;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 /**
@@ -22,8 +22,21 @@ class CompatibilityTest extends TestCase
         new class () implements FileInterface {
             public string $pathname;
 
-            public mixed $stream;
             public string $content;
+            public ?int $size;
+            public int $offset;
+            public bool $isSeekable;
+            public bool $isEof;
+
+            public function read(int $bytes): string
+            {
+                throw new \LogicException('Declared to be compiled rather than called');
+            }
+
+            public function __toString(): string
+            {
+                throw new \LogicException('Declared to be compiled rather than called');
+            }
         };
     }
 
@@ -31,8 +44,37 @@ class CompatibilityTest extends TestCase
     public function testReadableCompatibility(): void
     {
         new class () implements ReadableInterface {
-            public mixed $stream;
             public string $content;
+            public ?int $size;
+            public int $offset;
+            public bool $isSeekable;
+            public bool $isEof;
+
+            public function read(int $bytes): string
+            {
+                throw new \LogicException('Declared to be compiled rather than called');
+            }
+
+            public function __toString(): string
+            {
+                throw new \LogicException('Declared to be compiled rather than called');
+            }
+        };
+    }
+
+    #[DoesNotPerformAssertions]
+    public function testReadableStreamCompatibility(): void
+    {
+        new class () implements ReadableStreamInterface {
+            public ?int $size;
+            public int $offset;
+            public bool $isSeekable;
+            public bool $isEof;
+
+            public function read(int $bytes): string
+            {
+                throw new \LogicException('Declared to be compiled rather than called');
+            }
         };
     }
 
@@ -40,16 +82,5 @@ class CompatibilityTest extends TestCase
     public function testSourceExceptionCompatibility(): void
     {
         new class () extends \Exception implements SourceExceptionInterface {};
-    }
-
-    #[DoesNotPerformAssertions]
-    public function testSourceFactoryCompatibility(): void
-    {
-        new class () implements SourceFactoryInterface {
-            public function create(mixed $source): ReadableInterface
-            {
-                throw new \LogicException('Declared to be compiled rather than called');
-            }
-        };
     }
 }
